@@ -1,4 +1,4 @@
-def evaluate_formula(parsed_formula, constants, predicates):
+def evaluate_formula(parsed_formula, domain, constants, predicates):
     formula_type = parsed_formula["type"]
     
     # Case 1: Atomic predicate
@@ -9,6 +9,7 @@ def evaluate_formula(parsed_formula, constants, predicates):
     if formula_type == "not":
         inner_result = evaluate_formula(
             parsed_formula["formula"],
+            domain,
             constants,
             predicates
         )
@@ -18,12 +19,14 @@ def evaluate_formula(parsed_formula, constants, predicates):
     if formula_type == "and":
         left_result = evaluate_formula(
             parsed_formula["left"],
+            domain,
             constants,
             predicates
         )
         
         right_result = evaluate_formula(
             parsed_formula["right"],
+            domain,
             constants,
             predicates
         )
@@ -34,31 +37,48 @@ def evaluate_formula(parsed_formula, constants, predicates):
     if formula_type == "or":
         left_result = evaluate_formula(
             parsed_formula["left"],
+            domain,
             constants,
             predicates
         )
         right_result = evaluate_formula(
             parsed_formula["right"],
+            domain,
             constants,
             predicates
         )
         return left_result or right_result
     
     # Case 5: Implies
-    
     if formula_type == "implies":
         left_result = evaluate_formula(
             parsed_formula["left"],
+            domain,
             constants,
             predicates
         )
         right_result = evaluate_formula(
             parsed_formula["right"],
+            domain,
             constants,
             predicates
         )
         
         return (not left_result) or right_result
+    
+    # For all
+    if formula_type == "forall":
+        variable = parsed_formula["var"]
+        inner_formula = parsed_formula["formula"]
+    
+        for element in domain:
+            new_constants = constants.copy()
+            new_constants[variable] = element
+            
+            if not evaluate_formula(inner_formula, domain, new_constants, predicates):
+                return False
+        
+        return True
     
     raise ValueError(f"Unknown formula type: '{formula_type}'")
     

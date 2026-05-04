@@ -1,6 +1,20 @@
 def parse_formula(formula_text):
     formula_text = formula_text.strip()
     
+    if formula_text.startswith("forall"):
+        parts = formula_text.split(" ", 2)
+        
+        if len(parts) < 3:
+            raise ValueError("Invalid forall format")
+        
+        _, var, rest = parts
+        
+        return {
+            "type" : "forall",
+            "var" : var.strip(),
+            "formula" : parse_formula(rest.strip())
+        }
+    
     if " and " in formula_text:
         left_text, right_text = formula_text.split(" and ", 1)
         

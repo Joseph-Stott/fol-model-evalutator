@@ -59,6 +59,7 @@ def run_app():
             parsed_formula = parse_formula(formula)
             result = evaluate_formula(
                 parsed_formula,
+                parsed_domain,
                 parsed_constants,
                 parsed_predicates
             )
