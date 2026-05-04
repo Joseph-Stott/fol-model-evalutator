@@ -1,5 +1,41 @@
+def split_top_level(formula_text, operator):
+    count = 0
+    
+    for i in range(len(formula_text)):
+        char = formula_text[i]
+        
+        if char == "(":
+            count += 1
+        elif char == ")":
+            count -= 1
+                
+        if count == 0 and formula_text.startswith(operator, i):
+            left = formula_text[:i].strip()
+            right = formula_text[i + len(operator):].strip()
+            return left, right
+        
+    return None
+
 def parse_formula(formula_text):
     formula_text = formula_text.strip()
+    
+    # Handle outer parentheses only if they wrap the whole formula
+    if formula_text.startswith("(") and formula_text.endswith(")"):
+        count = 0
+        wraps_whole_formula = True
+
+        for i, char in enumerate(formula_text):
+            if char == "(":
+                count += 1
+            elif char == ")":
+                count -= 1
+
+            if count == 0 and i != len(formula_text) - 1:
+                wraps_whole_formula = False
+                break
+
+        if wraps_whole_formula:
+            return parse_formula(formula_text[1:-1].strip())
     
     if formula_text.startswith("forall"):
         parts = formula_text.split(" ", 2)
@@ -29,8 +65,9 @@ def parse_formula(formula_text):
             "formula" : parse_formula(rest.strip())
         }
     
-    if " and " in formula_text:
-        left_text, right_text = formula_text.split(" and ", 1)
+    and_split = split_top_level(formula_text, " and ")
+    if and_split:
+        left_text, right_text = and_split
         
         return {
             "type" : "and",
@@ -38,8 +75,9 @@ def parse_formula(formula_text):
             "right" : parse_formula(right_text)
         }
     
-    if " or " in formula_text:
-        left_text, right_text = formula_text.split(" or ", 1)
+    or_split = split_top_level(formula_text, " or ")
+    if or_split:
+        left_text, right_text = or_split
         
         return {
             "type" : "or",
@@ -47,8 +85,9 @@ def parse_formula(formula_text):
             "right" : parse_formula(right_text)
         }
     
-    if " -> " in formula_text:
-        left_text, right_text = formula_text.split(" -> ", 1)
+    implies_split = split_top_level(formula_text, " -> ")
+    if implies_split:
+        left_text, right_text = implies_split
         
         return {
             "type" : "implies",
