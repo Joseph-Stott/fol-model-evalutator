@@ -66,7 +66,7 @@ def evaluate_formula(parsed_formula, domain, constants, predicates):
         
         return (not left_result) or right_result
     
-    # For all
+    # Case 6: For all
     if formula_type == "forall":
         variable = parsed_formula["var"]
         inner_formula = parsed_formula["formula"]
@@ -79,6 +79,20 @@ def evaluate_formula(parsed_formula, domain, constants, predicates):
                 return False
         
         return True
+    
+    # Case 7: Exists
+    if formula_type == "exists":
+        variable = parsed_formula["var"]
+        inner_formula = parsed_formula["formula"]
+        
+        for element in domain:
+            new_constants = constants.copy()
+            new_constants[variable] = element
+            
+            if evaluate_formula(inner_formula, domain, new_constants, predicates):
+                return True
+        
+        return False
     
     raise ValueError(f"Unknown formula type: '{formula_type}'")
     

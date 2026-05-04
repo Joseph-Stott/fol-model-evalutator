@@ -15,6 +15,20 @@ def parse_formula(formula_text):
             "formula" : parse_formula(rest.strip())
         }
     
+    if formula_text.startswith("exists"):
+        parts = formula_text.split(" ", 2)
+        
+        if len(parts) < 3:
+            raise ValueError("Invalid exists format")
+        
+        _, var, rest = parts
+        
+        return {
+            "type" : "exists",
+            "var" : var.strip(),
+            "formula" : parse_formula(rest.strip())
+        }
+    
     if " and " in formula_text:
         left_text, right_text = formula_text.split(" and ", 1)
         
