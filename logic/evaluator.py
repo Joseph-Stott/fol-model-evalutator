@@ -1,3 +1,22 @@
+def evaluate_formula(parsed_formula, constants, predicates):
+    formula_type = parsed_formula["type"]
+    
+    # Case 1: Atomic predicate
+    if formula_type == "predicate":
+        return evaluate_atomic_formula(parsed_formula, constants, predicates)
+    
+    # Case 2: Negation
+    if formula_type == "not":
+        inner_result = evaluate_formula(
+            parsed_formula["formula"],
+            constants,
+            predicates
+        )
+        return not inner_result
+    
+    raise ValueError(f"Unknown formula type: '{formula_type}'")
+    
+    
 def evaluate_atomic_formula(parsed_formula, constants, predicates):
     name = parsed_formula["name"]
     args = parsed_formula["args"]

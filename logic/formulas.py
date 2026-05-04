@@ -1,3 +1,19 @@
+def parse_formula(formula_text):
+    formula_text = formula_text.strip()
+    
+    if formula_text.startswith("not"):
+        rest = formula_text[3:].strip()
+        
+        if rest == "":
+            raise ValueError("Negation must have a formula after 'not'")
+        
+        return {
+            "type" : "not",
+            "formula" : parse_formula(rest)
+        }
+    
+    return parse_atomic_formula(formula_text)
+
 def parse_atomic_formula(formula_text):
     formula_text = formula_text.strip()
     

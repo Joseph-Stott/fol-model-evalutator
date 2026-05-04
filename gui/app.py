@@ -1,7 +1,7 @@
 import tkinter as tk
 from logic.structures import parse_domain, parse_constants, parse_predicates
-from logic.formulas import parse_atomic_formula
-from logic.evaluator import evaluate_atomic_formula
+from logic.formulas import parse_atomic_formula, parse_formula
+from logic.evaluator import evaluate_atomic_formula, evaluate_formula
 
 def run_app():
     root = tk.Tk()
@@ -56,8 +56,8 @@ def run_app():
             parsed_domain = parse_domain(domain)
             parsed_constants = parse_constants(constants)
             parsed_predicates = parse_predicates(predicates)
-            parsed_formula = parse_atomic_formula(formula)
-            result = evaluate_atomic_formula(
+            parsed_formula = parse_formula(formula)
+            result = evaluate_formula(
                 parsed_formula,
                 parsed_constants,
                 parsed_predicates
