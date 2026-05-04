@@ -30,6 +30,20 @@ def evaluate_formula(parsed_formula, constants, predicates):
         
         return left_result and right_result
     
+    # Case 4: OR
+    if formula_type == "or":
+        left_result = evaluate_formula(
+            parsed_formula["left"],
+            constants,
+            predicates
+        )
+        right_result = evaluate_formula(
+            parsed_formula["right"],
+            constants,
+            predicates
+        )
+        return left_result or right_result
+    
     raise ValueError(f"Unknown formula type: '{formula_type}'")
     
     
