@@ -1,6 +1,15 @@
 def parse_formula(formula_text):
     formula_text = formula_text.strip()
     
+    if " and " in formula_text:
+        left_text, right_text = formula_text.split(" and ", 1)
+        
+        return {
+            "type" : "and",
+            "left" : parse_formula(left_text),
+            "right" : parse_formula(right_text)
+        }
+    
     if formula_text.startswith("not"):
         rest = formula_text[3:].strip()
         

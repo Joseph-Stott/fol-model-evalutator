@@ -14,6 +14,22 @@ def evaluate_formula(parsed_formula, constants, predicates):
         )
         return not inner_result
     
+    # Case 3: AND
+    if formula_type == "and":
+        left_result = evaluate_formula(
+            parsed_formula["left"],
+            constants,
+            predicates
+        )
+        
+        right_result = evaluate_formula(
+            parsed_formula["right"],
+            constants,
+            predicates
+        )
+        
+        return left_result and right_result
+    
     raise ValueError(f"Unknown formula type: '{formula_type}'")
     
     
