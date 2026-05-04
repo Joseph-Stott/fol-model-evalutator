@@ -9,28 +9,28 @@ def run_app():
     root.geometry("800x600")
     
     # Domain
-    domain_label = tk.Label(root, text="Domain (Ex. comma-separated):")
+    domain_label = tk.Label(root, text="Domain (comma-separated, ex. 1,2,3):")
     domain_label.grid(row=0, column=0, padx=10, pady=10, sticky="w")
     
     domain_entry = tk.Entry(root, width=40)
     domain_entry.grid(row=0, column=1, padx=10, pady=10)
     
     # Constants
-    constant_label = tk.Label(root, text="Constants: (Ex. a = 1)")
+    constant_label = tk.Label(root, text="Constants (ex. a=1, b=2):")
     constant_label.grid(row=1, column=0, padx=10, pady=10, sticky="w")
     
     constant_entry = tk.Entry(root, width=40)
     constant_entry.grid(row=1, column=1, padx=10, pady=10)
     
     # PREDICATES
-    predicates_label = tk.Label(root, text="Predicates: (Ex. P(x)=1,3)")
+    predicates_label = tk.Label(root, text="Predicates (ex. P={1,3}):")
     predicates_label.grid(row=2, column=0, padx=10, pady=10, sticky="nw")
 
     predicates_text = tk.Text(root, height=5, width=40)
     predicates_text.grid(row=2, column=1, padx=10, pady=10)
     
     # Formula
-    formula_label = tk.Label(root, text="Formula:")
+    formula_label = tk.Label(root, text="Formula (ex. forall x P(x)):")
     formula_label.grid(row=3, column=0, padx=10, pady=10, sticky="w")
 
     formula_entry = tk.Entry(root, width=40)
@@ -65,6 +65,8 @@ def run_app():
                 space + f"{formula['type'].upper()} {formula['var']}\n" +
                 pretty_print(formula["formula"], indent+1)
             )
+            
+        return space + str(formula)
         
     # Button
     def evaluate():
