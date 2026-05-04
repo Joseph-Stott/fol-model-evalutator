@@ -8,42 +8,65 @@ def run_app():
     root.title("FOL Model Evaluator")
     root.geometry("800x600")
     
-    # -- Domain --
+    # Domain
     domain_label = tk.Label(root, text="Domain (Ex. comma-separated):")
     domain_label.grid(row=0, column=0, padx=10, pady=10, sticky="w")
     
     domain_entry = tk.Entry(root, width=40)
     domain_entry.grid(row=0, column=1, padx=10, pady=10)
     
-    # -- Constants --
+    # Constants
     constant_label = tk.Label(root, text="Constants: (Ex. a = 1)")
     constant_label.grid(row=1, column=0, padx=10, pady=10, sticky="w")
     
     constant_entry = tk.Entry(root, width=40)
     constant_entry.grid(row=1, column=1, padx=10, pady=10)
     
-    # --- PREDICATES ---
+    # PREDICATES
     predicates_label = tk.Label(root, text="Predicates: (Ex. P(x)=1,3)")
     predicates_label.grid(row=2, column=0, padx=10, pady=10, sticky="nw")
 
     predicates_text = tk.Text(root, height=5, width=40)
     predicates_text.grid(row=2, column=1, padx=10, pady=10)
     
-    # -- Formula --
+    # Formula
     formula_label = tk.Label(root, text="Formula:")
     formula_label.grid(row=3, column=0, padx=10, pady=10, sticky="w")
 
     formula_entry = tk.Entry(root, width=40)
     formula_entry.grid(row=3, column=1, padx=10, pady=10)
     
-    # -- Output --
+    # Output
     output_label = tk.Label(root, text="Output:")
     output_label.grid(row=4, column=0, padx=10, pady=10, sticky="w")
 
     output_text = tk.Text(root, height=10, width=60)
     output_text.grid(row=4, column=1, padx=10, pady=10)
     
-    # -- Button -- 
+    # Pretty Print
+    def pretty_print(formula, indent=0):
+        space = "  " * indent
+        
+        if formula["type"] == "predicate":
+            return space + f"{formula['name']}({', '.join(formula['args'])})"
+        
+        if formula["type"] == "not":
+            return space + "NOT\n" + pretty_print(formula["formula"], indent+1)
+        
+        if formula["type"] in ["and", "or", "implies"]:
+            return(
+                space + formula["type"].upper() + "\n" +
+                pretty_print(formula["left"], indent+1) + "\n" +
+                pretty_print(formula["right"], indent+1)
+            )
+        
+        if formula["type"] in ["forall", "exists"]:
+            return(
+                space + f"{formula['type'].upper()} {formula['var']}\n" +
+                pretty_print(formula["formula"], indent+1)
+            )
+        
+    # Button
     def evaluate():
         domain = domain_entry.get()
         constants = constant_entry.get()
@@ -75,7 +98,8 @@ def run_app():
                 values = info["values"]
                 output_text.insert(tk.END, f"{name} (arity {arity}): {values}\n")
             output_text.insert(tk.END, f"Formula: \n{formula}\n")
-            output_text.insert(tk.END, f"Parsed Formula: \n{parsed_formula}\n")
+            output_text.insert(tk.END, "Parsed Formula: \n")
+            output_text.insert(tk.END, pretty_print(parsed_formula) + "\n")
             output_text.insert(tk.END, f"Result: {result}\n")
             
         except ValueError as error:
