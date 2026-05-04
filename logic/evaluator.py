@@ -44,6 +44,22 @@ def evaluate_formula(parsed_formula, constants, predicates):
         )
         return left_result or right_result
     
+    # Case 5: Implies
+    
+    if formula_type == "implies":
+        left_result = evaluate_formula(
+            parsed_formula["left"],
+            constants,
+            predicates
+        )
+        right_result = evaluate_formula(
+            parsed_formula["right"],
+            constants,
+            predicates
+        )
+        
+        return (not left_result) or right_result
+    
     raise ValueError(f"Unknown formula type: '{formula_type}'")
     
     
