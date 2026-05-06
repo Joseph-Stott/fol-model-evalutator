@@ -23,7 +23,7 @@ def run_app():
     constant_entry.grid(row=1, column=1, padx=10, pady=10)
     
     # PREDICATES
-    predicates_label = tk.Label(root, text="Predicates (ex. P={1,3}):")
+    predicates_label = tk.Label(root, text="Predicates (ex. P={1,3}, R={(1,2),(2,3)}):")
     predicates_label.grid(row=2, column=0, padx=10, pady=10, sticky="nw")
 
     predicates_text = tk.Text(root, height=5, width=40)
@@ -35,6 +35,21 @@ def run_app():
 
     formula_entry = tk.Entry(root, width=40)
     formula_entry.grid(row=3, column=1, padx=10, pady=10)
+    
+    # Formula Helper Buttons
+    forall_button = tk.Button(
+        root,
+        text="forall",
+        command=lambda: formula_entry.insert(tk.END, "forall x ")
+    )
+    forall_button.grid(row=3, column=2, padx=5)
+
+    exists_button = tk.Button(
+        root,
+        text="exists",
+        command=lambda: formula_entry.insert(tk.END, "exists x ")
+    )
+    exists_button.grid(row=3, column=3, padx=5)
     
     # Output
     output_label = tk.Label(root, text="Output:")
