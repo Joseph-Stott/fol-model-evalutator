@@ -6,7 +6,7 @@ from logic.evaluator import evaluate_atomic_formula, evaluate_formula
 def run_app():
     root = tk.Tk()
     root.title("FOL Model Evaluator")
-    root.geometry("800x600")
+    root.geometry("1100x700")
     
     # Domain
     domain_label = tk.Label(root, text="Domain (comma-separated, ex. 1,2,3):")
@@ -79,6 +79,13 @@ def run_app():
     )
     implies_button.grid(row=4, column=1, padx=310, sticky="w", pady=5)
     
+    clear_formula_button = tk.Button(
+        root,
+        text="Clear Formula",
+        command=lambda: formula_entry.delete(0, tk.END)
+    )
+    clear_formula_button.grid(row=4, column=1, padx=360, sticky="w", pady=5)
+    
     # Output
     output_label = tk.Label(root, text="Output:")
     output_label.grid(row=5, column=0, padx=10, pady=10, sticky="w")
@@ -150,7 +157,18 @@ def run_app():
         except ValueError as error:
             output_text.insert(tk.END, f"Error: {error}\n")
     
+    def clear_all():
+        domain_entry.delete(0, tk.END)
+        constant_entry.delete(0, tk.END)
+        predicates_text.delete("1.0", tk.END)
+        formula_entry.delete(0, tk.END)
+        output_text.delete("1.0", tk.END)
+    
+    
     eval_button = tk.Button(root, text="Evaluate", command=evaluate)
     eval_button.grid(row=6, column=1, pady=20)
+    
+    clear_button = tk.Button(root, text="Clear All", command=clear_all)
+    clear_button.grid(row=6, column=1, padx=100, pady=20)
     
     root.mainloop()
