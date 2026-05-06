@@ -42,21 +42,49 @@ def run_app():
         text="forall",
         command=lambda: formula_entry.insert(tk.END, "forall x ")
     )
-    forall_button.grid(row=3, column=2, padx=5)
+    forall_button.grid(row=4, column=1, sticky="w", pady=5)
 
     exists_button = tk.Button(
         root,
         text="exists",
         command=lambda: formula_entry.insert(tk.END, "exists x ")
     )
-    exists_button.grid(row=3, column=3, padx=5)
+    exists_button.grid(row=4, column=1, padx=70, sticky="w", pady=5)
+    
+    not_button = tk.Button(
+        root,
+        text="not",
+        command=lambda: formula_entry.insert(tk.END, "not ")
+    )
+    not_button.grid(row=4, column=1, padx=140, sticky="w", pady=5)
+
+    and_button = tk.Button(
+        root,
+        text="and",
+        command=lambda: formula_entry.insert(tk.END, " and ")
+    )
+    and_button.grid(row=4, column=1, padx=200, sticky="w", pady=5)
+
+    or_button = tk.Button(
+        root,
+        text="or",
+        command=lambda: formula_entry.insert(tk.END, " or ")
+    )
+    or_button.grid(row=4, column=1, padx=260, sticky="w", pady=5)
+
+    implies_button = tk.Button(
+        root,
+        text="->",
+        command=lambda: formula_entry.insert(tk.END, " -> ")
+    )
+    implies_button.grid(row=4, column=1, padx=310, sticky="w", pady=5)
     
     # Output
     output_label = tk.Label(root, text="Output:")
-    output_label.grid(row=4, column=0, padx=10, pady=10, sticky="w")
+    output_label.grid(row=5, column=0, padx=10, pady=10, sticky="w")
 
     output_text = tk.Text(root, height=10, width=60)
-    output_text.grid(row=4, column=1, padx=10, pady=10)
+    output_text.grid(row=5, column=1, padx=10, pady=10)
     
     # Pretty Print
     def pretty_print(formula, indent=0):
@@ -123,6 +151,6 @@ def run_app():
             output_text.insert(tk.END, f"Error: {error}\n")
     
     eval_button = tk.Button(root, text="Evaluate", command=evaluate)
-    eval_button.grid(row=5, column=1, pady=20)
+    eval_button.grid(row=6, column=1, pady=20)
     
     root.mainloop()
