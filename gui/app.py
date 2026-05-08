@@ -183,7 +183,17 @@ def run_app():
         text="->",
         command=lambda: formula_entry.insert(tk.END, " -> ")
     ).pack(side="left", padx=4)
+    tk.Button(
+    button_frame,
+    text="(",
+    command=lambda: formula_entry.insert(tk.END, "(")
+    ).pack(side="left", padx=4)
 
+    tk.Button(
+        button_frame,
+        text=")",
+        command=lambda: formula_entry.insert(tk.END, ")")
+    ).pack(side="left", padx=4)
     tk.Button(
         button_frame,
         text="Clear Formula",
