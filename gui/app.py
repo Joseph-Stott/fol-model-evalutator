@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import filedialog
 from logic.structures import parse_domain, parse_constants, parse_predicates
 from logic.formulas import parse_formula
 from logic.evaluator import evaluate_formula
@@ -146,6 +147,85 @@ def run_app():
         predicates_text.delete("1.0", tk.END)
         formula_entry.delete(0, tk.END)
         output_text.delete("1.0", tk.END)
+
+    def save_model():
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Text files", "*.txt"),("All Files", "*.*")]
+        )
+
+        if file_path == "":
+            return
+
+        domain = domain_entry.get()
+        constants = constant_entry.get()
+        predicates = predicates_text.get("1.0", tk.END).strip()
+        formula = formula_entry.get()
+
+        with open(file_path, "w") as file:
+            file.write("Domain:\n")
+            file.write(domain + "\n\n")
+
+            file.write("Constants:\n")
+            file.write(constants + "\n\n")
+
+            file.write("Predicates:\n")
+            file.write(predicates + "\n\n")
+
+            file.write("Formula:\n")
+            file.write(formula + "\n")
+
+    
+    def load_model():
+        file_path = filedialog.askopenfilename(
+            filetypes=[("Text files", "*.txt"),("All Files", "*.*")]
+        )
+
+        if file_path == "":
+            return
+        
+        domain_lines = []
+        constants_lines = []
+        predicates_lines = []
+        formula_lines = []
+
+        current_section = None
+
+        with open(file_path, "r") as file:
+            for line in file:
+                cleaned_line = line.strip()
+
+                if cleaned_line.lower() == "domain:":
+                    current_section = "domain"
+                    continue
+                elif cleaned_line.lower() == "constants:":
+                    current_section = "constants"
+                    continue
+                elif cleaned_line.lower() == "predicates:":
+                    current_section = "predicates"
+                    continue
+                elif cleaned_line.lower() == "formula:":
+                    current_section = "formula"
+                    continue
+
+                if current_section == "domain" and cleaned_line != "":
+                    domain_lines.append(cleaned_line)
+                elif current_section == "constants" and cleaned_line != "":
+                    constants_lines.append(cleaned_line)
+                elif current_section == "predicates" and cleaned_line != "":
+                    predicates_lines.append(cleaned_line)
+                elif current_section == "formula" and cleaned_line != "":
+                    formula_lines.append(cleaned_line)
+        
+        domain_entry.delete(0, tk.END)
+        constant_entry.delete(0, tk.END)
+        predicates_text.delete("1.0", tk.END)
+        formula_entry.delete(0, tk.END)
+
+        domain_entry.insert(0, "\n".join(domain_lines))
+        constant_entry.insert(0, "\n".join(constants_lines))
+        predicates_text.insert("1.0", "\n".join(predicates_lines))
+        formula_entry.insert(0, "\n".join(formula_lines))
     
     #Formula helper buttons
     tk.Button(
@@ -180,13 +260,14 @@ def run_app():
 
     tk.Button(
         button_frame,
-        text="->",
+        text="implies",
         command=lambda: formula_entry.insert(tk.END, " -> ")
     ).pack(side="left", padx=4)
+
     tk.Button(
-    button_frame,
-    text="(",
-    command=lambda: formula_entry.insert(tk.END, "(")
+        button_frame,
+        text="(",
+        command=lambda: formula_entry.insert(tk.END, "(")
     ).pack(side="left", padx=4)
 
     tk.Button(
@@ -194,6 +275,7 @@ def run_app():
         text=")",
         command=lambda: formula_entry.insert(tk.END, ")")
     ).pack(side="left", padx=4)
+
     tk.Button(
         button_frame,
         text="Clear Formula",
@@ -215,5 +297,11 @@ def run_app():
     
     clear_button = tk.Button(bottom_button_frame, text="Clear All", command=clear_all)
     clear_button.pack(side="left", padx=8)
+
+    save_button  = tk.Button(bottom_button_frame, text="Save", command=save_model)
+    save_button.pack(side="left", padx=8)
+
+    load_button = tk.Button(bottom_button_frame, text="load", command=load_model)
+    load_button.pack(side="left", padx=8)
     
     root.mainloop()
