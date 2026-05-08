@@ -34,6 +34,7 @@ This project is a model evaluator, not a theorem prover. It checks truth in a gi
 - Clear controls
 - Pretty-printed formula output
 - Colorized results and errors
+- Step-by-step evaluation trace
 
 ## Example
 

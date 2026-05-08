@@ -82,10 +82,16 @@ def run_app():
         constants = constant_entry.get()
         predicates = predicates_text.get("1.0", tk.END)
         formula = formula_entry.get()
-        
+
         output_text.delete("1.0", tk.END)
         
         try:
+            if domain.strip() == "":
+                raise ValueError("Domain cannot be empty. Example: 1,2,3")
+
+            if formula.strip() == "":
+                raise ValueError("Formula cannot be empty. Example: forall x P(x)")
+            
             parsed_domain = parse_domain(domain)
             parsed_constants = parse_constants(constants)
             parsed_predicates = parse_predicates(predicates)
