@@ -71,6 +71,10 @@ def run_app():
 
     output_text = tk.Text(root, height=10, width=60)
     output_text.grid(row=5, column=1, padx=10, pady=10)
+
+    output_text.tag_config("success", foreground="green")
+    output_text.tag_config("failure", foreground="red")
+    output_text.tag_config("error", foreground="red")
         
     # Button
     def evaluate():
@@ -106,10 +110,12 @@ def run_app():
             output_text.insert(tk.END, f"Formula: \n{formula}\n")
             output_text.insert(tk.END, "Parsed Formula: \n")
             output_text.insert(tk.END, pretty_print(parsed_formula) + "\n")
-            output_text.insert(tk.END, f"Result: {result}\n")
-            
+            if result:
+                output_text.insert(tk.END, f"Result: {result}\n", "success")
+            else:
+                output_text.insert(tk.END, f"Result: {result}\n", "failure")
         except ValueError as error:
-            output_text.insert(tk.END, f"Error: {error}\n")
+            output_text.insert(tk.END, f"Error: {error}\n", "error")
     
     def load_example():
         domain_entry.delete(0, tk.END)

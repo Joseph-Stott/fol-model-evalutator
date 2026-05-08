@@ -134,5 +134,3 @@ def parse_predicates(predicate_text):
         }
 
     return predicates
-    
-    

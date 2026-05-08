@@ -33,6 +33,7 @@ This project is a model evaluator, not a theorem prover. It checks truth in a gi
 - Load example button
 - Clear controls
 - Pretty-printed formula output
+- Colorized results and errors
 
 ## Example
 
