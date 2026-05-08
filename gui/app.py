@@ -1,7 +1,32 @@
 import tkinter as tk
 from logic.structures import parse_domain, parse_constants, parse_predicates
-from logic.formulas import parse_atomic_formula, parse_formula
-from logic.evaluator import evaluate_atomic_formula, evaluate_formula
+from logic.formulas import parse_formula
+from logic.evaluator import evaluate_formula
+
+# Pretty Print
+def pretty_print(formula, indent=0):
+    space = "  " * indent
+    
+    if formula["type"] == "predicate":
+        return space + f"{formula['name']}({', '.join(formula['args'])})"
+    
+    if formula["type"] == "not":
+        return space + "NOT\n" + pretty_print(formula["formula"], indent+1)
+    
+    if formula["type"] in ["and", "or", "implies"]:
+        return(
+            space + formula["type"].upper() + "\n" +
+            pretty_print(formula["left"], indent+1) + "\n" +
+            pretty_print(formula["right"], indent+1)
+        )
+    
+    if formula["type"] in ["forall", "exists"]:
+        return(
+            space + f"{formula['type'].upper()} {formula['var']}\n" +
+            pretty_print(formula["formula"], indent+1)
+        )
+        
+    return space + str(formula)
 
 def run_app():
     root = tk.Tk()
@@ -36,55 +61,9 @@ def run_app():
     formula_entry = tk.Entry(root, width=40)
     formula_entry.grid(row=3, column=1, padx=10, pady=10)
     
-    # Formula Helper Buttons
-    forall_button = tk.Button(
-        root,
-        text="forall",
-        command=lambda: formula_entry.insert(tk.END, "forall x ")
-    )
-    forall_button.grid(row=4, column=1, sticky="w", pady=5)
-
-    exists_button = tk.Button(
-        root,
-        text="exists",
-        command=lambda: formula_entry.insert(tk.END, "exists x ")
-    )
-    exists_button.grid(row=4, column=1, padx=70, sticky="w", pady=5)
-    
-    not_button = tk.Button(
-        root,
-        text="not",
-        command=lambda: formula_entry.insert(tk.END, "not ")
-    )
-    not_button.grid(row=4, column=1, padx=140, sticky="w", pady=5)
-
-    and_button = tk.Button(
-        root,
-        text="and",
-        command=lambda: formula_entry.insert(tk.END, " and ")
-    )
-    and_button.grid(row=4, column=1, padx=200, sticky="w", pady=5)
-
-    or_button = tk.Button(
-        root,
-        text="or",
-        command=lambda: formula_entry.insert(tk.END, " or ")
-    )
-    or_button.grid(row=4, column=1, padx=260, sticky="w", pady=5)
-
-    implies_button = tk.Button(
-        root,
-        text="->",
-        command=lambda: formula_entry.insert(tk.END, " -> ")
-    )
-    implies_button.grid(row=4, column=1, padx=310, sticky="w", pady=5)
-    
-    clear_formula_button = tk.Button(
-        root,
-        text="Clear Formula",
-        command=lambda: formula_entry.delete(0, tk.END)
-    )
-    clear_formula_button.grid(row=4, column=1, padx=360, sticky="w", pady=5)
+    # Formula helper button row
+    button_frame = tk.Frame(root)
+    button_frame.grid(row=4, column=1, pady=5, sticky="w")
     
     # Output
     output_label = tk.Label(root, text="Output:")
@@ -92,31 +71,6 @@ def run_app():
 
     output_text = tk.Text(root, height=10, width=60)
     output_text.grid(row=5, column=1, padx=10, pady=10)
-    
-    # Pretty Print
-    def pretty_print(formula, indent=0):
-        space = "  " * indent
-        
-        if formula["type"] == "predicate":
-            return space + f"{formula['name']}({', '.join(formula['args'])})"
-        
-        if formula["type"] == "not":
-            return space + "NOT\n" + pretty_print(formula["formula"], indent+1)
-        
-        if formula["type"] in ["and", "or", "implies"]:
-            return(
-                space + formula["type"].upper() + "\n" +
-                pretty_print(formula["left"], indent+1) + "\n" +
-                pretty_print(formula["right"], indent+1)
-            )
-        
-        if formula["type"] in ["forall", "exists"]:
-            return(
-                space + f"{formula['type'].upper()} {formula['var']}\n" +
-                pretty_print(formula["formula"], indent+1)
-            )
-            
-        return space + str(formula)
         
     # Button
     def evaluate():
@@ -157,6 +111,18 @@ def run_app():
         except ValueError as error:
             output_text.insert(tk.END, f"Error: {error}\n")
     
+    def load_example():
+        domain_entry.delete(0, tk.END)
+        constant_entry.delete(0, tk.END)
+        predicates_text.delete("1.0", tk.END)
+        formula_entry.delete(0, tk.END)
+        output_text.delete("1.0", tk.END)
+
+        domain_entry.insert(0, "1,2,3")
+        predicates_text.insert("1.0", "P={1}\nQ={2,3}")
+        formula_entry.insert(0, "forall x (P(x) or Q(x))")
+
+
     def clear_all():
         domain_entry.delete(0, tk.END)
         constant_entry.delete(0, tk.END)
@@ -164,11 +130,63 @@ def run_app():
         formula_entry.delete(0, tk.END)
         output_text.delete("1.0", tk.END)
     
+    #Formula helper buttons
+    tk.Button(
+        button_frame,
+        text="forall",
+        command=lambda: formula_entry.insert(tk.END, "forall x ")
+    ).pack(side="left", padx=4)
+
+    tk.Button(
+        button_frame,
+        text="exists",
+        command=lambda: formula_entry.insert(tk.END, "exists x ")
+    ).pack(side="left", padx=4)
+
+    tk.Button(
+        button_frame,
+        text="not",
+        command=lambda: formula_entry.insert(tk.END, "not ")
+    ).pack(side="left", padx=4)
+
+    tk.Button(
+        button_frame,
+        text="and",
+        command=lambda: formula_entry.insert(tk.END, " and ")
+    ).pack(side="left", padx=4)
+
+    tk.Button(
+        button_frame,
+        text="or",
+        command=lambda: formula_entry.insert(tk.END, " or ")
+    ).pack(side="left", padx=4)
+
+    tk.Button(
+        button_frame,
+        text="->",
+        command=lambda: formula_entry.insert(tk.END, " -> ")
+    ).pack(side="left", padx=4)
+
+    tk.Button(
+        button_frame,
+        text="Clear Formula",
+        command=lambda: formula_entry.delete(0, tk.END)
+    ).pack(side="left", padx=4)
+
+    tk.Button(
+        button_frame,
+        text="Load Example",
+        command=load_example
+    ).pack(side="left", padx=4)
     
-    eval_button = tk.Button(root, text="Evaluate", command=evaluate)
-    eval_button.grid(row=6, column=1, pady=20)
+    # Bottom row buttons
+    bottom_button_frame = tk.Frame(root)
+    bottom_button_frame.grid(row=6, column=1, pady=20)
+
+    eval_button = tk.Button(bottom_button_frame, text="Evaluate", command=evaluate)
+    eval_button.pack(side="left", padx=8)
     
-    clear_button = tk.Button(root, text="Clear All", command=clear_all)
-    clear_button.grid(row=6, column=1, padx=100, pady=20)
+    clear_button = tk.Button(bottom_button_frame, text="Clear All", command=clear_all)
+    clear_button.pack(side="left", padx=8)
     
     root.mainloop()
