@@ -90,11 +90,13 @@ def run_app():
             parsed_constants = parse_constants(constants)
             parsed_predicates = parse_predicates(predicates)
             parsed_formula = parse_formula(formula)
+            trace = []
             result = evaluate_formula(
                 parsed_formula,
                 parsed_domain,
                 parsed_constants,
-                parsed_predicates
+                parsed_predicates,
+                trace
             )
             
             output_text.insert(tk.END, f"Domain: \n{domain}\n")
@@ -110,6 +112,9 @@ def run_app():
             output_text.insert(tk.END, f"Formula: \n{formula}\n")
             output_text.insert(tk.END, "Parsed Formula: \n")
             output_text.insert(tk.END, pretty_print(parsed_formula) + "\n")
+            output_text.insert(tk.END, "Evaluation Trace:\n")
+            for step in trace:
+                output_text.insert(tk.END, f"{step}\n")
             if result:
                 output_text.insert(tk.END, f"Result: {result}\n", "success")
             else:

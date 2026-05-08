@@ -1,9 +1,25 @@
-def evaluate_formula(parsed_formula, domain, constants, predicates):
+def evaluate_formula(parsed_formula, domain, constants, predicates, trace=None):
+    if trace is None:
+        trace = []
+
     formula_type = parsed_formula["type"]
     
     # Case 1: Atomic predicate
     if formula_type == "predicate":
-        return evaluate_atomic_formula(parsed_formula, constants, predicates)
+        result = evaluate_atomic_formula(parsed_formula, constants, predicates)
+        
+        name = parsed_formula["name"]
+        resolved_args = []
+        for arg in parsed_formula["args"]:
+            if arg in constants:
+                resolved_args.append(constants[arg])
+            else:
+                resolved_args.append(arg)
+                
+        args = ", ".join(resolved_args)
+        trace.append(f"{name}({args}) = {result}")
+
+        return result
     
     # Case 2: Negation
     if formula_type == "not":
@@ -11,7 +27,8 @@ def evaluate_formula(parsed_formula, domain, constants, predicates):
             parsed_formula["formula"],
             domain,
             constants,
-            predicates
+            predicates,
+            trace
         )
         return not inner_result
     
@@ -21,14 +38,16 @@ def evaluate_formula(parsed_formula, domain, constants, predicates):
             parsed_formula["left"],
             domain,
             constants,
-            predicates
+            predicates,
+            trace
         )
         
         right_result = evaluate_formula(
             parsed_formula["right"],
             domain,
             constants,
-            predicates
+            predicates,
+            trace
         )
         
         return left_result and right_result
@@ -39,13 +58,15 @@ def evaluate_formula(parsed_formula, domain, constants, predicates):
             parsed_formula["left"],
             domain,
             constants,
-            predicates
+            predicates,
+            trace
         )
         right_result = evaluate_formula(
             parsed_formula["right"],
             domain,
             constants,
-            predicates
+            predicates,
+            trace
         )
         return left_result or right_result
     
@@ -55,13 +76,15 @@ def evaluate_formula(parsed_formula, domain, constants, predicates):
             parsed_formula["left"],
             domain,
             constants,
-            predicates
+            predicates,
+            trace
         )
         right_result = evaluate_formula(
             parsed_formula["right"],
             domain,
             constants,
-            predicates
+            predicates,
+            trace
         )
         
         return (not left_result) or right_result
@@ -74,8 +97,9 @@ def evaluate_formula(parsed_formula, domain, constants, predicates):
         for element in domain:
             new_constants = constants.copy()
             new_constants[variable] = element
+            trace.append(f"forall {variable}: checking {variable} = {element}")
             
-            if not evaluate_formula(inner_formula, domain, new_constants, predicates):
+            if not evaluate_formula(inner_formula, domain, new_constants, predicates, trace):
                 return False
         
         return True
@@ -88,8 +112,9 @@ def evaluate_formula(parsed_formula, domain, constants, predicates):
         for element in domain:
             new_constants = constants.copy()
             new_constants[variable] = element
+            trace.append(f"exists {variable}: checking {variable} = {element}")
             
-            if evaluate_formula(inner_formula, domain, new_constants, predicates):
+            if evaluate_formula(inner_formula, domain, new_constants, predicates, trace):
                 return True
         
         return False
