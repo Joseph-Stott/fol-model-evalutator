@@ -100,6 +100,12 @@ or:
 
     py main.py
 
+## Testing
+
+Run Tests with:
+
+    python -m unittest
+
 ## Limitations
 
 - This is not a theorem prover.

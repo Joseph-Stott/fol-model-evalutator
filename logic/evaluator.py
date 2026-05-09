@@ -15,7 +15,7 @@ def evaluate_formula(parsed_formula, domain, constants, predicates, trace=None):
                 resolved_args.append(constants[arg])
             else:
                 resolved_args.append(arg)
-                
+
         args = ", ".join(resolved_args)
         trace.append(f"{name}({args}) = {result}")
 
