@@ -76,6 +76,22 @@ def run_app():
     output_text.tag_config("success", foreground="green")
     output_text.tag_config("failure", foreground="red")
     output_text.tag_config("error", foreground="red")
+    
+    evaluation_history_frame = tk.Frame(root)
+    evaluation_history_frame.grid(row=1, column=2, padx=10, pady=10)
+
+    scroll_bar = tk.Scrollbar(evaluation_history_frame, orient="horizontal")
+
+    evaluation_history = tk.Listbox(
+        evaluation_history_frame,
+        width=45,
+        height=10,
+        xscrollcommand=scroll_bar.set)
+
+    evaluation_history.pack(side="top", fill="x")
+    scroll_bar.pack(side="bottom", fill="x")
+    scroll_bar.config(command=evaluation_history.xview)
+    
         
     # Button
     def evaluate():
@@ -126,6 +142,8 @@ def run_app():
                 output_text.insert(tk.END, f"Result: {result}\n", "success")
             else:
                 output_text.insert(tk.END, f"Result: {result}\n", "failure")
+            if formula.strip() != "":
+                evaluation_history.insert(tk.END, f"{formula} -> {result}")
         except ValueError as error:
             output_text.insert(tk.END, f"Error: {error}\n", "error")
     
