@@ -36,6 +36,7 @@ This project is a model evaluator, not a theorem prover. It checks truth in a gi
 - Colorized results and errors
 - Step-by-step evaluation trace
 - Save and load model files
+- Export evaluation output to a text file
 
 ## Example
 

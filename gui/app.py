@@ -226,6 +226,21 @@ def run_app():
         constant_entry.insert(0, "\n".join(constants_lines))
         predicates_text.insert("1.0", "\n".join(predicates_lines))
         formula_entry.insert(0, "\n".join(formula_lines))
+
+    def export_output():
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Text files", "*.txt"),("All Files", "*.*")]
+        )
+
+        if file_path == "":
+            return
+
+        output = output_text.get("1.0", tk.END).strip()
+
+        with open(file_path, "w") as file:
+            file.write("Output:\n")
+            file.write(output)
     
     #Formula helper buttons
     tk.Button(
@@ -292,16 +307,34 @@ def run_app():
     bottom_button_frame = tk.Frame(root)
     bottom_button_frame.grid(row=6, column=1, pady=20)
 
-    eval_button = tk.Button(bottom_button_frame, text="Evaluate", command=evaluate)
-    eval_button.pack(side="left", padx=8)
+    tk.Button(
+        bottom_button_frame, 
+        text="Evaluate",
+        command=evaluate
+    ).pack(side="left", padx=8)
     
-    clear_button = tk.Button(bottom_button_frame, text="Clear All", command=clear_all)
-    clear_button.pack(side="left", padx=8)
+    tk.Button(
+        bottom_button_frame,
+        text="Clear All",
+        command=clear_all
+    ).pack(side="left", padx=8)
 
-    save_button  = tk.Button(bottom_button_frame, text="Save", command=save_model)
-    save_button.pack(side="left", padx=8)
+    tk.Button(
+        bottom_button_frame,
+        text="Save",
+        command=save_model
+    ).pack(side="left", padx=8)
 
-    load_button = tk.Button(bottom_button_frame, text="load", command=load_model)
-    load_button.pack(side="left", padx=8)
+    tk.Button(
+        bottom_button_frame,
+        text="Load",
+        command=load_model
+    ).pack(side="left", padx=8)
+    
+    tk.Button(
+        bottom_button_frame,
+        text="Export Output",
+        command=export_output
+    ).pack(side="left",padx=8)
     
     root.mainloop()
