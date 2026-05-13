@@ -205,53 +205,41 @@ def run_app():
     # Bottom row buttons
     bottom_button_frame = tk.Frame(root)
     bottom_button_frame.grid(row=6, column=1, pady=20)
-
-    tk.Button(
-        bottom_button_frame, 
-        text="Evaluate",
-        command=evaluate
-    ).pack(side="left", padx=8)
     
-    tk.Button(
-        bottom_button_frame,
-        text="Clear All",
-        command=clear_all
-    ).pack(side="left", padx=8)
+    def create_bottom_button(text, command):
+        tk.Button(
+            bottom_button_frame,
+            text=text,
+            command=command
+        ).pack(side="left", padx=8)
 
-    tk.Button(
-        bottom_button_frame,
-        text="Save Model",
-        command=lambda: save_model(
+    create_bottom_button("Evaluate", evaluate)
+    create_bottom_button("Clear All", clear_all)
+    create_bottom_button(
+        "Save Model",
+        lambda: save_model(
             domain_entry,
             constant_entry,
             predicates_text,
             formula_entry
         )
-    ).pack(side="left", padx=8)
-
-    tk.Button(
-        bottom_button_frame,
-        text="Load Model",
-        command=lambda: load_model(
+    )
+    
+    create_bottom_button(
+        "Load Model",
+        lambda: load_model(
             domain_entry,
             constant_entry,
             predicates_text,
             formula_entry
         )
-    ).pack(side="left", padx=8)
+    )
     
-    tk.Button(
-        bottom_button_frame,
-        text="Export Output",
-        command=lambda: export_output(
-            output_text
-        )
-    ).pack(side="left",padx=8)
-    
-    tk.Button(
-        bottom_button_frame,
-        text="Clear History",
-        command=clear_history
-    ).pack(side="left",padx=8)
+    create_bottom_button(
+        "Export Output",
+        lambda: export_output(output_text)
+    )
+
+    create_bottom_button("Clear History", clear_history)
 
     root.mainloop()
