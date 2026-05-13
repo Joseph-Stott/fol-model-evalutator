@@ -80,11 +80,25 @@ def run_app():
     evaluation_history_frame = tk.Frame(root)
     evaluation_history_frame.grid(row=1, column=2, padx=10, pady=10, sticky="n")
 
+    def load_formula_from_history(event):
+        selected_index = evaluation_history.curselection()
+
+        if not selected_index:
+            return
+    
+        history_entry = evaluation_history.get(selected_index[0])
+        formula_text = history_entry.split("->")[0]
+
+        formula_entry.delete(0,tk.END)
+        formula_entry.insert(0, formula_text)
+
     evaluation_history = tk.Listbox(
         evaluation_history_frame,
         width=45,
         height=10
     )
+    
+    evaluation_history.bind("<<ListboxSelect>>", load_formula_from_history)
 
     vertical_scroll_bar = tk.Scrollbar(
         evaluation_history_frame,
@@ -203,7 +217,6 @@ def run_app():
 
             file.write("Formula:\n")
             file.write(formula + "\n")
-
     
     def load_model():
         file_path = filedialog.askopenfilename(
@@ -273,6 +286,7 @@ def run_app():
     
     def clear_history():
         evaluation_history.delete(0,tk.END)
+
 
     #Formula helper buttons
     tk.Button(

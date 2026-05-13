@@ -41,6 +41,7 @@ This project is a model evaluator, not a theorem prover. It checks truth in a gi
 - Clear history functionality
 - Auto-scrolling evaluation history
 - Scrollable evaluation history
+- Clickable evaluation history entries
 
 ## Example
 
