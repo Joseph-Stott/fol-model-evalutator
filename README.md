@@ -43,6 +43,7 @@ This project is a model evaluator, not a theorem prover. It checks truth in a gi
 - Scrollable evaluation history
 - Clickable evaluation history entries
 - Formula helper buttons insert at cursor position
+- Randomized example loading
 
 ## Example
 

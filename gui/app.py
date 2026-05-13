@@ -3,6 +3,7 @@ from tkinter import filedialog
 from logic.structures import parse_domain, parse_constants, parse_predicates
 from logic.formulas import parse_formula
 from logic.evaluator import evaluate_formula
+import random
 
 # Pretty Print
 def pretty_print(formula, indent=0):
@@ -173,15 +174,39 @@ def run_app():
             output_text.insert(tk.END, f"Error: {error}\n", "error")
     
     def load_example():
+        examples = [
+            {
+                "domain": "1,2,3",
+                "constants": "",
+                "predicates": "P={1}\nQ={2,3}",
+                "formula": "forall x (P(x) or Q(x))"
+            },
+            {
+                "domain": "1,2,3",
+                "constants": "",
+                "predicates": "P={1,3}",
+                "formula": "exists x P(x)"
+            },
+            {
+                "domain": "1,2,3",
+                "constants": "a=1",
+                "predicates": "P={1}\nR={(1,2),(2,3)}",
+                "formula": "P(a) and R(1,2)"
+            }
+        ]
+
+        selected_example = random.choice(examples)
+
         domain_entry.delete(0, tk.END)
         constant_entry.delete(0, tk.END)
         predicates_text.delete("1.0", tk.END)
         formula_entry.delete(0, tk.END)
         output_text.delete("1.0", tk.END)
 
-        domain_entry.insert(0, "1,2,3")
-        predicates_text.insert("1.0", "P={1}\nQ={2,3}")
-        formula_entry.insert(0, "forall x (P(x) or Q(x))")
+        domain_entry.insert(0, selected_example["domain"])
+        constant_entry.insert(0, selected_example["constants"])
+        predicates_text.insert("1.0", selected_example["predicates"])
+        formula_entry.insert(0, selected_example["formula"])
 
 
     def clear_all():
@@ -345,7 +370,7 @@ def run_app():
 
     tk.Button(
         button_frame,
-        text="Load Example",
+        text="Random Example",
         command=load_example
     ).pack(side="left", padx=4)
     
