@@ -2,6 +2,7 @@ import tkinter as tk
 from logic.structures import parse_domain, parse_constants, parse_predicates
 from logic.formulas import parse_formula
 from logic.evaluator import evaluate_formula
+from logic.evaluation_service import run_evaluation
 from gui.formatting import display_evaluation_output
 from gui.file_operations import save_model, load_model, export_output
 from gui.examples import EXAMPLES
@@ -68,41 +69,29 @@ def run_app():
         output_text.delete("1.0", tk.END)
         
         try:
-            if domain.strip() == "":
-                raise ValueError("Domain cannot be empty. Example: 1,2,3")
-
-            if formula.strip() == "":
-                raise ValueError("Formula cannot be empty. Example: forall x P(x)")
-            
-            parsed_domain = parse_domain(domain)
-            parsed_constants = parse_constants(constants)
-            parsed_predicates = parse_predicates(predicates)
-            parsed_formula = parse_formula(formula)
-            trace = []
-            result = evaluate_formula(
-                parsed_formula,
-                parsed_domain,
-                parsed_constants,
-                parsed_predicates,
-                trace
+            evaluation_data = run_evaluation(
+                domain,
+                constants,
+                predicates,
+                formula
             )
             
             display_evaluation_output(
                 output_text,
                 domain,
-                parsed_domain,
+                evaluation_data["parsed_domain"],
                 constants,
-                parsed_constants,
+                evaluation_data["parsed_constants"],
                 predicates,
-                parsed_predicates,
+                evaluation_data["parsed_predicates"],
                 formula,
-                parsed_formula,
-                trace,
-                result
+                evaluation_data["parsed_formula"],
+                evaluation_data["trace"],
+                evaluation_data["result"]
             )
 
             if formula.strip() != "":
-                add_to_history(evaluation_history, formula, result)
+                add_to_history(evaluation_history, formula, evaluation_data["result"])
 
         except ValueError as error:
             output_text.insert(tk.END, f"Error: {error}\n", "error")
