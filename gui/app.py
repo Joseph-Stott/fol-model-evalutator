@@ -1,13 +1,9 @@
 import tkinter as tk
-from logic.structures import parse_domain, parse_constants, parse_predicates
-from logic.formulas import parse_formula
-from logic.evaluator import evaluate_formula
 from logic.evaluation_service import run_evaluation
 from gui.formatting import display_evaluation_output
 from gui.file_operations import save_model, load_model, export_output
-from gui.examples import EXAMPLES
+from gui.examples import EXAMPLES, load_random_example
 from gui.history import create_history_panel, add_to_history, clear_history
-import random
 
 def run_app():
     root = tk.Tk()
@@ -95,20 +91,6 @@ def run_app():
 
         except ValueError as error:
             output_text.insert(tk.END, f"Error: {error}\n", "error")
-    
-    def load_example():
-        selected_example = random.choice(EXAMPLES)
-
-        domain_entry.delete(0, tk.END)
-        constant_entry.delete(0, tk.END)
-        predicates_text.delete("1.0", tk.END)
-        formula_entry.delete(0, tk.END)
-        output_text.delete("1.0", tk.END)
-
-        domain_entry.insert(0, selected_example["domain"])
-        constant_entry.insert(0, selected_example["constants"])
-        predicates_text.insert("1.0", selected_example["predicates"])
-        formula_entry.insert(0, selected_example["formula"])
 
     def clear_all():
         domain_entry.delete(0, tk.END)
@@ -143,7 +125,13 @@ def run_app():
     tk.Button(
         button_frame,
         text="Random Example",
-        command=load_example
+        command=lambda: load_random_example(
+            domain_entry,
+            constant_entry,
+            predicates_text,
+            formula_entry,
+            output_text
+        )
     ).pack(side="left", padx=4)
     
     # Bottom row buttons
