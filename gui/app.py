@@ -97,7 +97,7 @@ def run_app():
         width=45,
         height=10
     )
-    
+
     evaluation_history.bind("<<ListboxSelect>>", load_formula_from_history)
 
     vertical_scroll_bar = tk.Scrollbar(
@@ -292,49 +292,49 @@ def run_app():
     tk.Button(
         button_frame,
         text="forall",
-        command=lambda: formula_entry.insert(tk.END, "forall x ")
+        command=lambda: formula_entry.insert(tk.INSERT, "forall x ")
     ).pack(side="left", padx=4)
 
     tk.Button(
         button_frame,
         text="exists",
-        command=lambda: formula_entry.insert(tk.END, "exists x ")
+        command=lambda: formula_entry.insert(tk.INSERT, "exists x ")
     ).pack(side="left", padx=4)
 
     tk.Button(
         button_frame,
         text="not",
-        command=lambda: formula_entry.insert(tk.END, "not ")
+        command=lambda: formula_entry.insert(tk.INSERT, "not ")
     ).pack(side="left", padx=4)
 
     tk.Button(
         button_frame,
         text="and",
-        command=lambda: formula_entry.insert(tk.END, " and ")
+        command=lambda: formula_entry.insert(tk.INSERT, " and ")
     ).pack(side="left", padx=4)
 
     tk.Button(
         button_frame,
         text="or",
-        command=lambda: formula_entry.insert(tk.END, " or ")
+        command=lambda: formula_entry.insert(tk.INSERT, " or ")
     ).pack(side="left", padx=4)
 
     tk.Button(
         button_frame,
         text="implies",
-        command=lambda: formula_entry.insert(tk.END, " -> ")
+        command=lambda: formula_entry.insert(tk.INSERT, " -> ")
     ).pack(side="left", padx=4)
 
     tk.Button(
         button_frame,
         text="(",
-        command=lambda: formula_entry.insert(tk.END, "(")
+        command=lambda: formula_entry.insert(tk.INSERT, "(")
     ).pack(side="left", padx=4)
 
     tk.Button(
         button_frame,
         text=")",
-        command=lambda: formula_entry.insert(tk.END, ")")
+        command=lambda: formula_entry.insert(tk.INSERT, ")")
     ).pack(side="left", padx=4)
 
     tk.Button(
