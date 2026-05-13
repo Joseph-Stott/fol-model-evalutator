@@ -58,7 +58,7 @@ def run_app():
     evaluation_history_frame = tk.Frame(root)
     evaluation_history_frame.grid(row=1, column=2, padx=10, pady=10, sticky="n")
 
-    def load_formula_from_history(event):
+    def load_history_selection(event):
         selected_index = evaluation_history.curselection()
 
         if not selected_index:
@@ -76,7 +76,7 @@ def run_app():
         height=10
     )
 
-    evaluation_history.bind("<<ListboxSelect>>", load_formula_from_history)
+    evaluation_history.bind("<<ListboxSelect>>", load_history_selection)
 
     vertical_scroll_bar = tk.Scrollbar(
         evaluation_history_frame,
@@ -93,8 +93,12 @@ def run_app():
     evaluation_history.grid(row=0, column=0, sticky="nsew")
     vertical_scroll_bar.grid(row=0, column=1, sticky="ns")
     horizontal_scroll_bar.grid(row=1, column=0, sticky="ew")
-        
-    # Button
+    
+    def add_to_history(formula, result):
+        evaluation_history.insert(tk.END, f"{formula} -> {result}")
+        evaluation_history.see(tk.END)
+
+    # Evaluate button
     def evaluate():
         domain = domain_entry.get()
         constants = constant_entry.get()
@@ -144,8 +148,7 @@ def run_app():
             else:
                 output_text.insert(tk.END, f"Result: {result}\n", "failure")
             if formula.strip() != "":
-                evaluation_history.insert(tk.END, f"{formula} -> {result}")
-                evaluation_history.see(tk.END)
+                add_to_history(formula, result)
         except ValueError as error:
             output_text.insert(tk.END, f"Error: {error}\n", "error")
     
@@ -224,7 +227,7 @@ def run_app():
             formula_entry
         )
     )
-    
+
     create_bottom_button(
         "Load Model",
         lambda: load_model(
