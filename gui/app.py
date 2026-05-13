@@ -2,7 +2,7 @@ import tkinter as tk
 from logic.structures import parse_domain, parse_constants, parse_predicates
 from logic.formulas import parse_formula
 from logic.evaluator import evaluate_formula
-from gui.formatting import pretty_print
+from gui.formatting import display_evaluation_output
 from gui.file_operations import save_model, load_model, export_output
 from gui.examples import EXAMPLES
 import random
@@ -107,43 +107,6 @@ def run_app():
     def add_to_history(formula, result):
         evaluation_history.insert(tk.END, f"{formula} -> {result}")
         evaluation_history.see(tk.END)
-
-    def display_evaluation_output(
-            domain,
-            parsed_domain,
-            constants,
-            parsed_constants,
-            predicates,
-            parsed_predicates, 
-            formula,
-            parsed_formula,
-            trace,
-            result
-        ):
-        output_text.insert(tk.END, f"Domain:\n{domain}\n")
-        output_text.insert(tk.END, f"Parsed Domain:\n{parsed_domain}\n")
-        output_text.insert(tk.END, f"Constants:\n{constants}\n")
-        output_text.insert(tk.END, f"Parsed Constants:\n{parsed_constants}\n")
-        output_text.insert(tk.END, f"Predicates:\n{predicates}\n")
-        output_text.insert(tk.END, f"Parsed Predicates:\n{parsed_predicates}\n")
-
-        for name, info in parsed_predicates.items():
-            arity = info["arity"]
-            values = info["values"]
-            output_text.insert(tk.END, f"{name} (arity {arity}): {values}\n")
-
-        output_text.insert(tk.END, f"Formula:\n{formula}\n")
-        output_text.insert(tk.END, f"Parsed Formula:\n")
-        output_text.insert(tk.END, pretty_print(parsed_formula) + "\n")
-
-        output_text.insert(tk.END, "Evaluation Trace:\n")
-        for step in trace:
-            output_text.insert(tk.END, f"{step}\n")
-
-        if result:
-            output_text.insert(tk.END, f"Result: {result}\n", "success")
-        else:
-            output_text.insert(tk.END, f"Result: {result}\n", "failure")
         
     # Evaluate button
     def evaluate():
