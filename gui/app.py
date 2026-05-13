@@ -78,19 +78,29 @@ def run_app():
     output_text.tag_config("error", foreground="red")
     
     evaluation_history_frame = tk.Frame(root)
-    evaluation_history_frame.grid(row=1, column=2, padx=10, pady=10)
-
-    scroll_bar = tk.Scrollbar(evaluation_history_frame, orient="horizontal")
+    evaluation_history_frame.grid(row=1, column=2, padx=10, pady=10, sticky="n")
 
     evaluation_history = tk.Listbox(
         evaluation_history_frame,
         width=45,
-        height=10,
-        xscrollcommand=scroll_bar.set)
+        height=10
+    )
 
-    evaluation_history.pack(side="top", fill="x")
-    scroll_bar.pack(side="bottom", fill="x")
-    scroll_bar.config(command=evaluation_history.xview)
+    vertical_scroll_bar = tk.Scrollbar(
+        evaluation_history_frame,
+        orient="vertical",
+        command=evaluation_history.yview
+    )
+
+    horizontal_scroll_bar = tk.Scrollbar(
+        evaluation_history_frame,
+        orient="horizontal",
+        command=evaluation_history.xview
+    )
+
+    evaluation_history.grid(row=0, column=0, sticky="nsew")
+    vertical_scroll_bar.grid(row=0, column=1, sticky="ns")
+    horizontal_scroll_bar.grid(row=1, column=0, sticky="ew")
     
         
     # Button
