@@ -260,6 +260,9 @@ def run_app():
             file.write("Output:\n")
             file.write(output)
     
+    def clear_history():
+        evaluation_history.delete(0,tk.END)
+
     #Formula helper buttons
     tk.Button(
         button_frame,
@@ -355,4 +358,10 @@ def run_app():
         command=export_output
     ).pack(side="left",padx=8)
     
+    tk.Button(
+        bottom_button_frame,
+        text="Clear History",
+        command=clear_history
+    ).pack(side="left",padx=8)
+
     root.mainloop()
