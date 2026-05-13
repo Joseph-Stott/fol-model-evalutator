@@ -3,6 +3,7 @@ from tkinter import filedialog
 from logic.structures import parse_domain, parse_constants, parse_predicates
 from logic.formulas import parse_formula
 from logic.evaluator import evaluate_formula
+from gui.formatting import pretty_print
 import random
 
 EXAMPLES = [
@@ -25,31 +26,6 @@ EXAMPLES = [
                 "formula": "P(a) and R(1,2)"
             }
         ]
-
-# Pretty Print
-def pretty_print(formula, indent=0):
-    space = "  " * indent
-    
-    if formula["type"] == "predicate":
-        return space + f"{formula['name']}({', '.join(formula['args'])})"
-    
-    if formula["type"] == "not":
-        return space + "NOT\n" + pretty_print(formula["formula"], indent+1)
-    
-    if formula["type"] in ["and", "or", "implies"]:
-        return(
-            space + formula["type"].upper() + "\n" +
-            pretty_print(formula["left"], indent+1) + "\n" +
-            pretty_print(formula["right"], indent+1)
-        )
-    
-    if formula["type"] in ["forall", "exists"]:
-        return(
-            space + f"{formula['type'].upper()} {formula['var']}\n" +
-            pretty_print(formula["formula"], indent+1)
-        )
-        
-    return space + str(formula)
 
 def run_app():
     root = tk.Tk()
