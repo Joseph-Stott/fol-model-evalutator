@@ -39,6 +39,7 @@ This project is a model evaluator, not a theorem prover. It checks truth in a gi
 - Export evaluation output to a text file
 - Evaluation History panel
 - Clear history functionality
+- Auto-scrolling evaluation history
 
 ## Example
 

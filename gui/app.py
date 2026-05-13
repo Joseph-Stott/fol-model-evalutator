@@ -144,6 +144,7 @@ def run_app():
                 output_text.insert(tk.END, f"Result: {result}\n", "failure")
             if formula.strip() != "":
                 evaluation_history.insert(tk.END, f"{formula} -> {result}")
+                evaluation_history.see(tk.END)
         except ValueError as error:
             output_text.insert(tk.END, f"Error: {error}\n", "error")
     
