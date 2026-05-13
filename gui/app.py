@@ -173,54 +173,22 @@ def run_app():
     def clear_history():
         evaluation_history.delete(0,tk.END)
 
+    def create_formula_button(text, insert_text):
+        tk.Button(
+            button_frame,
+            text=text,
+            command=lambda: formula_entry.insert(tk.INSERT, insert_text)
+        ).pack(side="left", padx=4)
+
     #Formula helper buttons
-    tk.Button(
-        button_frame,
-        text="forall",
-        command=lambda: formula_entry.insert(tk.INSERT, "forall x ")
-    ).pack(side="left", padx=4)
-
-    tk.Button(
-        button_frame,
-        text="exists",
-        command=lambda: formula_entry.insert(tk.INSERT, "exists x ")
-    ).pack(side="left", padx=4)
-
-    tk.Button(
-        button_frame,
-        text="not",
-        command=lambda: formula_entry.insert(tk.INSERT, "not ")
-    ).pack(side="left", padx=4)
-
-    tk.Button(
-        button_frame,
-        text="and",
-        command=lambda: formula_entry.insert(tk.INSERT, " and ")
-    ).pack(side="left", padx=4)
-
-    tk.Button(
-        button_frame,
-        text="or",
-        command=lambda: formula_entry.insert(tk.INSERT, " or ")
-    ).pack(side="left", padx=4)
-
-    tk.Button(
-        button_frame,
-        text="implies",
-        command=lambda: formula_entry.insert(tk.INSERT, " -> ")
-    ).pack(side="left", padx=4)
-
-    tk.Button(
-        button_frame,
-        text="(",
-        command=lambda: formula_entry.insert(tk.INSERT, "(")
-    ).pack(side="left", padx=4)
-
-    tk.Button(
-        button_frame,
-        text=")",
-        command=lambda: formula_entry.insert(tk.INSERT, ")")
-    ).pack(side="left", padx=4)
+    create_formula_button("forall", "forall x ")
+    create_formula_button("exists", "exists x ")
+    create_formula_button("not", "not ")
+    create_formula_button("and", " and ")
+    create_formula_button("or", " or ")
+    create_formula_button("implies", " -> ")
+    create_formula_button("(", "(")
+    create_formula_button(")", ")")
 
     tk.Button(
         button_frame,
