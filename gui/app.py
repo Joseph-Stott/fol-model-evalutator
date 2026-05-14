@@ -4,6 +4,7 @@ from gui.formatting import display_evaluation_output
 from gui.file_operations import save_model, load_model, export_output
 from gui.examples import EXAMPLES, load_random_example
 from gui.history import create_history_panel, add_to_history, clear_history
+from gui.widget_helpers import clear_all_fields, clear_formula
 
 def run_app():
     root = tk.Tk()
@@ -92,13 +93,6 @@ def run_app():
         except ValueError as error:
             output_text.insert(tk.END, f"Error: {error}\n", "error")
 
-    def clear_all():
-        domain_entry.delete(0, tk.END)
-        constant_entry.delete(0, tk.END)
-        predicates_text.delete("1.0", tk.END)
-        formula_entry.delete(0, tk.END)
-        output_text.delete("1.0", tk.END)
-
     def create_formula_button(text, insert_text):
         tk.Button(
             button_frame,
@@ -119,7 +113,7 @@ def run_app():
     tk.Button(
         button_frame,
         text="Clear Formula",
-        command=lambda: formula_entry.delete(0, tk.END)
+        command=lambda: clear_formula(formula_entry)
     ).pack(side="left", padx=4)
 
     tk.Button(
@@ -146,7 +140,17 @@ def run_app():
         ).pack(side="left", padx=8)
 
     create_bottom_button("Evaluate", evaluate)
-    create_bottom_button("Clear All", clear_all)
+
+    create_bottom_button(
+        "Clear All",
+        lambda: clear_all_fields(
+            domain_entry,
+            constant_entry,
+            predicates_text,
+            formula_entry, output_text
+        )
+    )
+
     create_bottom_button(
         "Save Model",
         lambda: save_model(
